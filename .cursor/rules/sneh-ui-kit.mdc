@@ -1,0 +1,181 @@
+---
+description: Sneh UI Kit — rules for all AI agents working in this repository
+globs: ["src/**/*.tsx", "src/**/*.ts", "src/**/*.css"]
+alwaysApply: true
+---
+
+# Sneh UI Kit — Agent Rules
+
+You are working inside **sneh-ui-kit**, a reusable design system built with **Next.js 16 + Tailwind CSS v4 + TypeScript**.
+This kit is the foundation for many projects — consistency is critical. Follow these rules precisely.
+
+---
+
+## Project Structure
+
+```
+src/
+  app/
+    globals.css          ← Tailwind + @theme sync (do not touch @theme block)
+    layout.tsx           ← Root layout with ThemeProvider
+    page.tsx             ← Component showcase / demo page
+  components/
+    ui/                  ← Primitive UI components
+      index.ts           ← Barrel export (import from here)
+    layout/              ← Layout shells
+      index.ts           ← Barrel export
+  design-system/
+    tokens.css           ← ALL design tokens (single source of truth)
+    themes.css           ← Dark mode token overrides
+    motion.css           ← Animation keyframes and utility classes
+    ui-guidelines.md     ← Design principles
+  providers/
+    ThemeProvider.tsx    ← Theme context + useTheme() hook
+ai/
+  component-contracts.md ← Component prop API contracts
+  cursor-rules.md        ← This file (Cursor rules)
+```
+
+---
+
+## Available Components
+
+Always check these before creating new ones:
+
+### UI Components — import from `@/components/ui`
+
+| Component | Variants / Key Props |
+|-----------|----------------------|
+| `Button`  | variant: primary\|secondary\|ghost\|outline\|danger; size: sm\|md\|lg; loading; leftIcon; rightIcon |
+| `Input`   | label, error, helperText, disabled |
+| `Select`  | options[], label, error, helperText, disabled |
+| `Textarea`| label, error, helperText, disabled, resize, rows |
+| `Card`    | padding: none\|sm\|md\|lg; clickable; loading (skeleton) |
+| `Modal`   | isOpen, onClose, title, size: sm\|md\|lg\|xl |
+| `Table`   | striped, hoverable + sub-components: Thead, Tbody, Tr, Th, Td |
+| `Badge`   | variant: default\|success\|warning\|error\|info; size: sm\|md |
+| `Alert`   | variant: info\|success\|warning\|error; title; dismissible; onDismiss |
+| `Spinner` | size: sm\|md\|lg; color (CSS value) |
+| `Avatar`  | src, name (initials fallback), size: sm\|md\|lg\|xl; status: online\|offline\|away\|none |
+| `Tooltip` | content, placement: top\|bottom\|left\|right |
+
+### Layout Components — import from `@/components/layout`
+
+| Component    | Key Props |
+|-------------|-----------|
+| `Header`    | logo, nav, actions — dark mode toggle is built-in |
+| `Sidebar`   | children, className |
+| `Container` | size: sm\|md\|lg\|xl\|full |
+| `PageLayout`| sidebarContent, headerContent, children |
+
+---
+
+## Design Tokens
+
+**NEVER hardcode hex colors, pixel values, or magic numbers.**
+Always reference CSS custom properties from `tokens.css`.
+
+### Color Tokens
+```
+--color-primary            --color-primary-hover       --color-primary-subtle
+--color-success            --color-success-subtle
+--color-warning            --color-warning-subtle
+--color-error              --color-error-subtle
+--color-info               --color-info-subtle
+--color-bg                 --color-surface             --color-surface-hover
+--color-text               --color-text-secondary      --color-muted
+--color-border             --color-border-strong
+```
+
+### Spacing Tokens (4px base scale)
+```
+--space-xs (4px)  --space-sm (8px)  --space-md (16px)
+--space-lg (24px) --space-xl (32px) --space-2xl (48px) --space-3xl (64px)
+```
+
+### Other Tokens
+```
+Radius:  --radius-sm  --radius-md  --radius-lg  --radius-xl  --radius-full
+Shadow:  --shadow-xs  --shadow-sm  --shadow-md  --shadow-lg  --shadow-xl
+Z-index: --z-dropdown --z-sticky  --z-overlay  --z-modal    --z-toast
+Duration: --duration-fast  --duration-normal  --duration-slow
+Easing:  --ease-standard  --ease-spring
+```
+
+### Tailwind Utilities (registered via @theme)
+These tokens are synced into Tailwind, so you can also use:
+`text-primary`, `bg-surface`, `border-border`, `shadow-md`, `rounded-lg`
+etc. instead of `[var(--...)]` syntax — both are valid.
+
+---
+
+## Animation Classes (from motion.css)
+
+```css
+animate-fade-in       animate-slide-up      animate-scale-in
+animate-slide-in-right  animate-spin        animate-shimmer
+transition-base       transition-fast
+```
+
+---
+
+## Component Rules
+
+### ✅ DO
+- Import components from barrel: `import { Button, Card } from "@/components/ui"`
+- Use design tokens for all colors, spacing, radius, shadows
+- Follow the existing prop naming convention (`variant`, `size`, `loading`, `disabled`)
+- Add `className` prop and spread it into the root element with `clsx`
+- Spread `...props` for HTML attribute pass-through
+- New form-like inputs must support: `label`, `error`, `helperText`, `disabled`
+- New components must export a default export
+- Use `useTheme()` from `@/providers/ThemeProvider` for dark mode access
+- Prefix animation classes with `animate-` (they come from `motion.css`)
+
+### ❌ DON'T
+- Don't hardcode colors: `bg-blue-500` ❌ → `bg-[var(--color-primary)]` ✅
+- Don't create new CSS files — use Tailwind + design tokens
+- Don't install new UI libraries (Radix, MUI, Shadcn etc.) without explicit instruction
+- Don't use `style={{ }}` inline styles
+- Don't create a new component if an existing one with a different prop covers the need
+- Don't skip accessibility: missing `aria-*`, `role`, `htmlFor` is a failure
+
+---
+
+## Styling Convention
+
+Use `clsx` for conditional class composition:
+
+```tsx
+import clsx from "clsx"
+
+className={clsx(
+  "base-styles",
+  variant === "primary" && "variant-styles",
+  disabled && "disabled-styles",
+  className   // always pass through
+)}
+```
+
+---
+
+## Dark Mode
+
+Dark mode is handled by `ThemeProvider` setting `data-theme="dark"` on `<html>`.
+All token overrides are in `themes.css`. 
+
+**Do not** add manual `dark:` Tailwind prefixes — all colors flip automatically via `[data-theme="dark"]`.
+
+---
+
+## When to Create a New Component
+
+Only create a new component if:
+1. The UI pattern doesn't exist in `src/components/ui/`
+2. The pattern is used in 2+ places
+3. It cannot be achieved by composing existing components
+
+New components go in `src/components/ui/` and must be:
+- Added to `src/components/ui/index.ts`
+- Added to this rules file's component table
+- Documented in `ai/component-contracts.md`
