@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
 
 type Variant = "info" | "success" | "warning" | "error";
@@ -69,9 +70,6 @@ export default function Alert({
   className,
 }: Props) {
   const [visible, setVisible] = useState(true);
-
-  if (!visible) return null;
-
   const s = styles[variant];
 
   function handleDismiss() {
@@ -80,45 +78,53 @@ export default function Alert({
   }
 
   return (
-    <div
-      role="alert"
-      className={clsx(
-        "flex gap-[var(--space-sm)] rounded-[var(--radius-md)] p-[var(--space-md)] animate-fade-in",
-        s.wrapper,
-        className
-      )}
-    >
-      {/* Icon */}
-      <span className={clsx("mt-0.5 shrink-0", s.icon)}>
-        {icons[variant]}
-      </span>
-
-      {/* Body */}
-      <div className="flex-1 min-w-0">
-        {title && (
-          <p className={clsx("font-semibold text-sm mb-0.5", s.title)}>{title}</p>
-        )}
-        {children && (
-          <p className="text-sm text-[var(--color-text-secondary)]">{children}</p>
-        )}
-      </div>
-
-      {/* Dismiss */}
-      {dismissible && (
-        <button
-          onClick={handleDismiss}
-          aria-label="Dismiss alert"
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          role="alert"
+          initial={{ opacity: 0, y: -10, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.2 } }}
+          transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
           className={clsx(
-            "shrink-0 -mr-1 -mt-1 p-1 rounded-[var(--radius-sm)]",
-            "text-[var(--color-muted)] hover:text-[var(--color-text)]",
-            "hover:bg-white/20 transition-base cursor-pointer"
+            "flex gap-[var(--space-sm)] rounded-[var(--radius-md)] p-[var(--space-md)]",
+            s.wrapper,
+            className
           )}
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
-            <path d="M18 6L6 18M6 6l12 12"/>
-          </svg>
-        </button>
+          {/* Icon */}
+          <span className={clsx("mt-0.5 shrink-0", s.icon)}>
+            {icons[variant]}
+          </span>
+
+          {/* Body */}
+          <div className="flex-1 min-w-0">
+            {title && (
+              <p className={clsx("font-semibold text-sm mb-0.5", s.title)}>{title}</p>
+            )}
+            {children && (
+              <p className="text-sm text-[var(--color-text-secondary)]">{children}</p>
+            )}
+          </div>
+
+          {/* Dismiss */}
+          {dismissible && (
+            <button
+              onClick={handleDismiss}
+              aria-label="Dismiss alert"
+              className={clsx(
+                "shrink-0 -mr-1 -mt-1 p-1 rounded-[var(--radius-sm)]",
+                "text-[var(--color-muted)] hover:text-[var(--color-text)]",
+                "hover:bg-white/20 transition-base cursor-pointer"
+              )}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          )}
+        </motion.div>
       )}
-    </div>
+    </AnimatePresence>
   );
 }

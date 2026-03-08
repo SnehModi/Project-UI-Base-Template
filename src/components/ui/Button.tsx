@@ -1,5 +1,6 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
 import clsx from "clsx";
+import MagneticWrapper from "./MagneticWrapper";
 
 /* ---- Spinner (inline, no extra dep) ---- */
 function ButtonSpinner() {
@@ -34,6 +35,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?:  Variant;
   size?:     Size;
   loading?:  boolean;
+  magnetic?: boolean;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
 };
@@ -61,6 +63,7 @@ export default function Button({
   variant  = "primary",
   size     = "md",
   loading  = false,
+  magnetic = false,
   leftIcon,
   rightIcon,
   className,
@@ -70,7 +73,7 @@ export default function Button({
 }: Props) {
   const isDisabled = disabled || loading;
 
-  return (
+  const buttonElement = (
     <button
       disabled={isDisabled}
       aria-busy={loading}
@@ -108,4 +111,10 @@ export default function Button({
       )}
     </button>
   );
+
+  if (magnetic && !isDisabled) {
+    return <MagneticWrapper>{buttonElement}</MagneticWrapper>;
+  }
+
+  return buttonElement;
 }

@@ -1,4 +1,7 @@
-import { ReactNode } from "react";
+"use client";
+
+import { ReactNode, MouseEvent, useRef } from "react";
+import { motion, HTMLMotionProps } from "framer-motion";
 import clsx from "clsx";
 
 type Padding = "none" | "sm" | "md" | "lg";
@@ -10,7 +13,8 @@ const paddingMap: Record<Padding, string> = {
   lg:   "p-[var(--space-lg)]",
 };
 
-type Props = {
+// Use intersection to support motion div props
+type Props = Omit<HTMLMotionProps<"div">, "children"> & {
   children?:  ReactNode;
   className?: string;
   padding?:   Padding;
@@ -34,17 +38,41 @@ export default function Card({
   padding   = "md",
   clickable = false,
   loading   = false,
+  onMouseMove,
+  ...props
 }: Props) {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    cardRef.current.style.setProperty("--mouse-x", `${x}px`);
+    cardRef.current.style.setProperty("--mouse-y", `${y}px`);
+    
+    // Call original onMouseMove if passed
+    if (onMouseMove) onMouseMove(e);
+  };
+
   return (
-    <div
+    <motion.div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
       role={clickable ? "button" : undefined}
       tabIndex={clickable ? 0 : undefined}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }} // smooth ease out
+      whileHover={clickable ? { y: -4, scale: 1.01 } : undefined}
+      whileTap={clickable ? { scale: 0.98 } : undefined}
       className={clsx(
+        "relative overflow-hidden", // needed for the absolute glow
         "bg-[var(--color-bg)] border border-[var(--color-border)]",
         /* Glassmorphism backing, distinct in dark mode */
         "backdrop-blur-xl bg-opacity-80 dark:bg-opacity-40",
         "rounded-[var(--radius-xl)] shadow-[var(--shadow-sm)]",
-        "transition-all duration-[var(--duration-normal)] ease-[var(--ease-spring)]", /* Ensure we use the spring physics */
+        "transition-shadow duration-[var(--duration-normal)]",
         paddingMap[padding],
 
         /* Faint inner highlight for premium 3D feel */
@@ -54,15 +82,21 @@ export default function Card({
         clickable && [
           "cursor-pointer",
           "hover:shadow-[var(--shadow-lg)] dark:hover:shadow-[var(--shadow-glow)]",
-          "hover:-translate-y-1 hover:scale-[1.01]",
-          "active:scale-[0.98]",
           "focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:outline-none",
         ],
 
         className
       )}
+      {...props}
     >
-      {loading ? <CardSkeleton /> : children}
-    </div>
+      {/* The Glow Layer */}
+      <div 
+        className="absolute inset-0 z-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 mouse-glow mix-blend-soft-light"
+      />
+      {/* Content Layer */}
+      <div className="relative z-10">
+        {loading ? <CardSkeleton /> : children}
+      </div>
+    </motion.div>
   );
 }

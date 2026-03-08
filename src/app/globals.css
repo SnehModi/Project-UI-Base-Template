@@ -93,7 +93,7 @@ html {
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-geist-sans, system-ui, -apple-system, sans-serif);
+  font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
   font-size: var(--font-size-md);
   line-height: var(--line-height-normal);
   letter-spacing: var(--letter-spacing-normal);
@@ -121,4 +121,42 @@ body {
   transition-property: background-color, border-color, box-shadow;
   transition-duration: var(--duration-normal);
   transition-timing-function: var(--ease-standard);
+}
+
+/* ============================================================
+   PREMIUM AESTHETICS (Utility Classes)
+   ============================================================ */
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Glow tracking effect helper - to be used with framer motion or react state */
+.mouse-glow {
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 0) var(--mouse-y, 0),
+    rgba(255, 255, 255, 0.06),
+    transparent 40%
+  );
+}
+[data-theme="light"] .mouse-glow {
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 0) var(--mouse-y, 0),
+    rgba(0, 0, 0, 0.02),
+    transparent 40%
+  );
+}
+
+/* Mesh Gradient helper */
+.bg-mesh {
+  background-color: var(--color-bg);
+  background-image: 
+    radial-gradient(at 40% 20%, hsla(228,100%,74%,0.15) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, hsla(189,100%,56%,0.15) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, hsla(355,100%,93%,0.15) 0px, transparent 50%);
+}
+[data-theme="dark"] .bg-mesh {
+  background-image: 
+    radial-gradient(at 40% 20%, hsla(228,100%,74%,0.08) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, hsla(189,100%,56%,0.08) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, hsla(355,100%,93%,0.08) 0px, transparent 50%);
 }
