@@ -40,21 +40,21 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const variantStyles: Record<Variant, string> = {
   primary:
-    "bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-hover)] shadow-[var(--shadow-xs)]",
+    "bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-hover)] shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-glow)] active:shadow-[var(--shadow-inset)]",
   secondary:
-    "bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] hover:bg-[var(--color-surface-hover)]",
+    "bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] shadow-[var(--shadow-xs)]",
   ghost:
     "bg-transparent text-[var(--color-text)] hover:bg-[var(--color-surface-hover)]",
   outline:
-    "bg-transparent border border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary-subtle)]",
+    "bg-transparent border border-[var(--color-border-strong)] text-[var(--color-text)] hover:bg-[var(--color-surface-hover)] hover:border-[var(--color-primary-muted)]",
   danger:
-    "bg-[var(--color-error)] text-white hover:bg-[var(--color-error-hover)] shadow-[var(--shadow-xs)]",
+    "bg-[var(--color-error)] text-white hover:bg-[var(--color-error-hover)] shadow-[var(--shadow-sm)]",
 };
 
 const sizeStyles: Record<Size, string> = {
-  sm: "px-3 py-1.5 text-xs gap-1.5 h-8",
-  md: "px-4 py-2  text-sm gap-2   h-10",
-  lg: "px-5 py-3  text-base gap-2 h-12",
+  sm: "px-3 py-1.5 text-xs gap-1.5 h-8 rounded-[var(--radius-sm)]",
+  md: "px-4 py-2  text-sm gap-2   h-10 rounded-[var(--radius-md)]",
+  lg: "px-5 py-3  text-base gap-2 h-12 rounded-[var(--radius-lg)]",
 };
 
 export default function Button({
@@ -76,9 +76,11 @@ export default function Button({
       aria-busy={loading}
       className={clsx(
         /* Base */
-        "inline-flex items-center justify-center font-medium rounded-[var(--radius-md)]",
+        "inline-flex items-center justify-center font-medium",
         "transition-base cursor-pointer select-none",
+        "active:scale-[0.97] hover:-translate-y-[1px]", /* The premium spring bounce effect */
         "focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2",
+        "focus-visible:ring-offset-[var(--color-bg)]",
 
         /* Variant */
         variantStyles[variant],

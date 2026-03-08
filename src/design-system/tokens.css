@@ -1,51 +1,54 @@
 /* ============================================================
-   SNEH UI KIT — Design Tokens
+   SNEH UI KIT — Design Tokens (Premium Modern Edition)
    Source of truth for all visual values.
-   Never use raw hex/px values outside this file.
    ============================================================ */
 
 :root {
 
   /* ----------------------------------------------------------
-     COLORS — Brand
+     COLORS — Brand (Vivid, elegant blue focus)
   ---------------------------------------------------------- */
-  --color-primary:        #2563eb;
-  --color-primary-hover:  #1d4ed8;
-  --color-primary-subtle: #dbeafe;
-  --color-primary-muted:  #93c5fd;
+  --color-primary:        #3b82f6; /* slightly brighter blue */
+  --color-primary-hover:  #2563eb;
+  --color-primary-subtle: #eff6ff;
+  --color-primary-muted:  #bfdbfe;
 
   /* ----------------------------------------------------------
      COLORS — Semantic
   ---------------------------------------------------------- */
-  --color-success:        #16a34a;
-  --color-success-hover:  #15803d;
-  --color-success-subtle: #dcfce7;
+  /* A cleaner, more vivid emerald */
+  --color-success:        #10b981;
+  --color-success-hover:  #059669;
+  --color-success-subtle: #ecfdf5;
 
-  --color-warning:        #d97706;
-  --color-warning-hover:  #b45309;
-  --color-warning-subtle: #fef3c7;
+  /* Sophisticated amber/gold */
+  --color-warning:        #f59e0b;
+  --color-warning-hover:  #d97706;
+  --color-warning-subtle: #fffbeb;
 
-  --color-error:          #dc2626;
-  --color-error-hover:    #b91c1c;
-  --color-error-subtle:   #fee2e2;
+  /* Vivid crisp rose/red */
+  --color-error:          #ef4444;
+  --color-error-hover:    #dc2626;
+  --color-error-subtle:   #fef2f2;
 
-  --color-info:           #0891b2;
-  --color-info-hover:     #0e7490;
-  --color-info-subtle:    #cffafe;
+  /* Clean cyan */
+  --color-info:           #0ea5e9;
+  --color-info-hover:     #0284c7;
+  --color-info-subtle:    #f0f9ff;
 
   /* ----------------------------------------------------------
-     COLORS — Surface & Text
+     COLORS — Surface & Text (Ultra crisp light mode)
   ---------------------------------------------------------- */
-  --color-bg:             #ffffff;
-  --color-surface:        #f8fafc;
-  --color-surface-hover:  #f1f5f9;
+  --color-bg:             #fcfcfd; /* Off-white for less eye-strain */
+  --color-surface:        #ffffff;
+  --color-surface-hover:  #f8fafc;
 
-  --color-text:           #0f172a;
-  --color-text-secondary: #334155;
-  --color-muted:          #64748b;
+  --color-text:           #09090b; /* Zinc 950 - ink black */
+  --color-text-secondary: #52525b; /* Zinc 600 - subtle gray */
+  --color-muted:          #a1a1aa; /* Zinc 400 */
 
-  --color-border:         #e2e8f0;
-  --color-border-strong:  #cbd5e1;
+  --color-border:         #e4e4e7; /* Zinc 200 */
+  --color-border-strong:  #d4d4d8; /* Zinc 300 */
 
   /* ----------------------------------------------------------
      TYPOGRAPHY
@@ -64,13 +67,14 @@
   --font-weight-semibold:  600;
   --font-weight-bold:      700;
 
-  --line-height-tight:     1.25;
+  --line-height-tight:     1.2;
   --line-height-normal:    1.5;
-  --line-height-relaxed:   1.75;
+  --line-height-relaxed:   1.7;
 
-  --letter-spacing-tight:  -0.025em;
-  --letter-spacing-normal:  0em;
-  --letter-spacing-wide:    0.025em;
+  /* Tighter tracking for premium feel on display text */
+  --letter-spacing-tight:  -0.03em;
+  --letter-spacing-normal: -0.01em;
+  --letter-spacing-wide:    0.02em;
 
   /* ----------------------------------------------------------
      SPACING (4px base scale)
@@ -97,25 +101,34 @@
   --space-3xl:  var(--space-16);
 
   /* ----------------------------------------------------------
-     BORDER RADIUS
+     BORDER RADIUS (Sleek Apple-like curves)
   ---------------------------------------------------------- */
   --radius-none:  0px;
-  --radius-sm:    6px;
-  --radius-md:    10px;
-  --radius-lg:    14px;
-  --radius-xl:    20px;
+  --radius-sm:    8px;
+  --radius-md:    12px;
+  --radius-lg:    16px;
+  --radius-xl:    24px;
   --radius-full:  9999px;
 
   /* ----------------------------------------------------------
-     SHADOWS
+     SHADOWS (Smooth, premium diffusion)
   ---------------------------------------------------------- */
   --shadow-none:  none;
-  --shadow-xs:    0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-sm:    0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md:    0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
-  --shadow-lg:    0 10px 30px rgba(0, 0, 0, 0.10), 0 4px 8px rgba(0, 0, 0, 0.06);
-  --shadow-xl:    0 20px 48px rgba(0, 0, 0, 0.12), 0 8px 16px rgba(0, 0, 0, 0.06);
-  --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  /* Very subtle standard shadow */
+  --shadow-xs:    0 2px 4px -1px rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02);
+  /* Elegant elevation */
+  --shadow-sm:    0 4px 12px -2px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+  /* Floating card feel */
+  --shadow-md:    0 12px 24px -4px rgba(0, 0, 0, 0.06), 0 8px 16px -6px rgba(0, 0, 0, 0.03);
+  /* Deep layered drop */
+  --shadow-lg:    0 24px 48px -12px rgba(0, 0, 0, 0.08), 0 12px 24px -8px rgba(0, 0, 0, 0.04);
+  /* Heavy diffuse float */
+  --shadow-xl:    0 32px 64px -12px rgba(0, 0, 0, 0.10);
+  /* Internal engraved look */
+  --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+
+  /* Glow shadows for primary elements */
+  --shadow-glow:  0 0 16px -2px rgba(59, 130, 246, 0.4);
 
   /* ----------------------------------------------------------
      Z-INDEX
@@ -130,18 +143,24 @@
   --z-toast:    500;
 
   /* ----------------------------------------------------------
-     MOTION (see also motion.css)
+     MOTION (Premium Spring Physics)
   ---------------------------------------------------------- */
-  --ease-standard:    cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-decelerate:  cubic-bezier(0, 0, 0.2, 1);
-  --ease-accelerate:  cubic-bezier(0.4, 0, 1, 1);
-  --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-standard:    cubic-bezier(0.25, 1, 0.5, 1);     /* Smooth out */
+  --ease-decelerate:  cubic-bezier(0, 0.55, 0.45, 1);    /* Fast enter */
+  --ease-accelerate:  cubic-bezier(0.85, 0, 1, 1);       /* Fast exit */
+  
+  /* The secret sauce for premium feel - custom spring */
+  --ease-spring:      linear(
+    0, 0.051 2.2%, 0.198 4.7%, 0.42 7.7%, 0.59 10%, 0.74 12.3%, 0.865 14.8%,
+    0.963 17.6%, 1.026 20.2%, 1.066 23.1%, 1.085 26.3%, 1.086 29.8%, 1.072 33.6%,
+    1.049 37.8%, 0.99 49%, 0.985 55.4%, 0.988 62.7%, 1.002 73.6%, 1 100%
+  );
 
   --duration-instant: 0ms;
-  --duration-fast:    120ms;
-  --duration-normal:  200ms;
-  --duration-slow:    350ms;
-  --duration-slower:  500ms;
+  --duration-fast:    150ms;
+  --duration-normal:  300ms;
+  --duration-slow:    450ms;
+  --duration-slower:  600ms;
 
   /* ----------------------------------------------------------
      LAYOUT

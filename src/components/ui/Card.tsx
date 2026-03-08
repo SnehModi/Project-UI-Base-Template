@@ -41,16 +41,22 @@ export default function Card({
       tabIndex={clickable ? 0 : undefined}
       className={clsx(
         "bg-[var(--color-bg)] border border-[var(--color-border)]",
-        "rounded-[var(--radius-lg)] shadow-[var(--shadow-sm)]",
-        "transition-base",
+        /* Glassmorphism backing, distinct in dark mode */
+        "backdrop-blur-xl bg-opacity-80 dark:bg-opacity-40",
+        "rounded-[var(--radius-xl)] shadow-[var(--shadow-sm)]",
+        "transition-all duration-[var(--duration-normal)] ease-[var(--ease-spring)]", /* Ensure we use the spring physics */
         paddingMap[padding],
+
+        /* Faint inner highlight for premium 3D feel */
+        "shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]",
 
         /* Clickable variant */
         clickable && [
           "cursor-pointer",
-          "hover:shadow-[var(--shadow-md)]",
-          "hover:-translate-y-0.5",
-          "focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]",
+          "hover:shadow-[var(--shadow-lg)] dark:hover:shadow-[var(--shadow-glow)]",
+          "hover:-translate-y-1 hover:scale-[1.01]",
+          "active:scale-[0.98]",
+          "focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:outline-none",
         ],
 
         className
