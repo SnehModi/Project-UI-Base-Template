@@ -14,6 +14,8 @@ export { default as Spinner }  from "./Spinner";
 export { default as Table }    from "./Table";
 export { default as Textarea } from "./Textarea";
 export { default as Tooltip }  from "./Tooltip";
+export { default as Filter }   from "./Filter";
+export { DataTable }           from "./DataTable";
 
 // Table sub-components
 export { Thead, Tbody, Tr, Th, Td } from "./Table";

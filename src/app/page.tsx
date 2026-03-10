@@ -4,16 +4,71 @@ import { useState } from "react";
 import {
   Alert, Avatar, Badge, Button, Card, Input,
   Modal, Select, Spinner, Table, Textarea, Tooltip,
-  Thead, Tbody, Tr, Th, Td,
+  Thead, Tbody, Tr, Th, Td, Filter, DataTable
 } from "@/components/ui";
+import { ColumnDef } from "@tanstack/react-table";
 import { Header, Container, Sidebar, PageLayout } from "@/components/layout";
 
-/* ---- Demo data ---- */
-const TABLE_DATA = [
-  { name: "Alice",   role: "Engineer",  status: "Active",  joined: "Jan 2024" },
-  { name: "Bob",     role: "Designer",  status: "Away",    joined: "Mar 2024" },
-  { name: "Charlie", role: "Manager",   status: "Active",  joined: "Nov 2023" },
-  { name: "Diana",   role: "Engineer",  status: "Offline", joined: "Feb 2024" },
+type Employee = {
+  id: string;
+  name: string;
+  role: string;
+  department: string;
+  status: "Active" | "Away" | "Offline";
+  joined: string;
+};
+
+const TABLE_DATA: Employee[] = [
+  { id: "1", name: "Alice Lee",    role: "Senior Engineer", department: "Engineering", status: "Active",  joined: "Jan 2024" },
+  { id: "2", name: "Bob Smith",    role: "UX Designer",     department: "Design",      status: "Away",    joined: "Mar 2024" },
+  { id: "3", name: "Charlie Day",  role: "Product Manager", department: "Product",     status: "Active",  joined: "Nov 2023" },
+  { id: "4", name: "Diana Prince", role: "DevOps Engineer", department: "Engineering", status: "Offline", joined: "Feb 2024" },
+  { id: "5", name: "Evan Wright",  role: "Frontend Dev",    department: "Engineering", status: "Active",  joined: "Apr 2024" },
+  { id: "6", name: "Fiona Gallagher", role: "Marketer",     department: "Marketing",   status: "Away",    joined: "Jul 2023" },
+];
+
+const COLUMNS: ColumnDef<Employee>[] = [
+  {
+    accessorKey: "name",
+    header: "Name",
+    cell: ({ row }) => (
+      <div className="flex items-center gap-3">
+        <Avatar size="sm" name={row.original.name} status={row.original.status.toLowerCase() as any} />
+        <span className="font-medium">{row.getValue("name")}</span>
+      </div>
+    ),
+  },
+  {
+    accessorKey: "role",
+    header: "Role",
+  },
+  {
+    accessorKey: "department",
+    header: "Dept.",
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => {
+      const status = row.getValue("status") as string;
+      return (
+        <Badge
+          variant={
+            status === "Active" ? "success" :
+            status === "Away" ? "warning" : "default"
+          }
+          size="sm"
+        >
+          {status}
+        </Badge>
+      );
+    },
+  },
+  {
+    accessorKey: "joined",
+    header: "Joined",
+    cell: ({ row }) => <span className="text-[var(--color-muted)]">{row.getValue("joined")}</span>,
+  },
 ];
 
 const NAV_ITEMS = ["Components", "Tokens", "Motion", "Docs"];
@@ -135,8 +190,9 @@ export default function ShowcasePage() {
             </p>
           </div>
 
-          {/* ======== FOUNDATION ======== */}
-          <Section id="foundation" title="Foundation — Color Tokens">
+          {/* ======== TOKENS ======== */}
+          <div id="tokens" className="scroll-mt-20">
+            <Section id="foundation" title="Foundation — Color Tokens">
             <div className="space-y-[var(--space-md)]">
               <div>
                 <Label>Brand</Label>
@@ -168,8 +224,10 @@ export default function ShowcasePage() {
               </div>
             </div>
           </Section>
+          </div>
 
-          {/* ======== BUTTONS ======== */}
+          {/* ======== COMPONENTS ======== */}
+          <div id="components" className="scroll-mt-20">
           <Section id="buttons" title="Button">
             <div className="space-y-[var(--space-md)]">
               <div>
@@ -309,38 +367,22 @@ export default function ShowcasePage() {
           </Section>
 
           {/* ======== DATA ======== */}
-          <Section id="data" title="Table">
-            <Table striped hoverable>
-              <Thead>
-                <Tr>
-                  <Th>Name</Th>
-                  <Th>Role</Th>
-                  <Th>Status</Th>
-                  <Th>Joined</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {TABLE_DATA.map((row) => (
-                  <Tr key={row.name}>
-                    <Td className="font-medium">{row.name}</Td>
-                    <Td>{row.role}</Td>
-                    <Td>
-                      <Badge
-                        variant={
-                          row.status === "Active"  ? "success" :
-                          row.status === "Away"    ? "warning" :
-                          "default"
-                        }
-                        size="sm"
-                      >
-                        {row.status}
-                      </Badge>
-                    </Td>
-                    <Td className="text-[var(--color-muted)]">{row.joined}</Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
+          <Section id="data" title="DataTable (Sorting, Grouping, Dnd Column Reorder)">
+            <DataTable
+              columns={COLUMNS}
+              data={TABLE_DATA}
+              enableSorting
+              enableGrouping
+              enableColumnReorder
+              enableGlobalFilter
+              globalFilterPlaceholder="Search employees..."
+              filterOptions={[
+                { label: "Engineering", value: "Engineering" },
+                { label: "Design", value: "Design" },
+                { label: "Product", value: "Product" },
+              ]}
+              onFilterChange={(val) => console.log("Filter by:", val)}
+            />
           </Section>
 
           {/* ======== MEDIA ======== */}
@@ -403,6 +445,48 @@ export default function ShowcasePage() {
               </div>
             </Modal>
           </Section>
+          </div>
+
+          {/* ======== MOTION ======== */}
+          <div id="motion" className="pt-[var(--space-2xl)] scroll-mt-20">
+            <div className="pb-[var(--space-sm)] border-b border-[var(--color-border)]">
+              <h2 className="text-2xl font-bold text-[var(--color-text)]">Motion</h2>
+            </div>
+            <p className="mt-[var(--space-md)] text-[var(--color-text-secondary)]">
+              Sneh UI Kit includes standard motion utilities for smooth, consistent animations. 
+              Hover over the cards below to see the transitions in action, or use the predefined animation classes.
+            </p>
+            <div className="mt-[var(--space-lg)] grid grid-cols-2 md:grid-cols-4 gap-[var(--space-md)]">
+              <Card className="flex items-center justify-center h-32 hover:-translate-y-2 transition-base cursor-pointer">
+                Hover: Lift
+              </Card>
+              <Card className="flex items-center justify-center h-32 animate-pulse">
+                Pulse
+              </Card>
+              <Card className="flex items-center justify-center h-32 animate-fade-in">
+                Fade In
+              </Card>
+              <Card className="flex items-center justify-center h-32 hover:scale-105 transition-fast cursor-pointer">
+                Hover: Scale
+              </Card>
+            </div>
+          </div>
+
+          {/* ======== DOCS ======== */}
+          <div id="docs" className="pt-[var(--space-2xl)] scroll-mt-20">
+            <div className="pb-[var(--space-sm)] border-b border-[var(--color-border)]">
+              <h2 className="text-2xl font-bold text-[var(--color-text)]">Docs</h2>
+            </div>
+            <Card className="mt-[var(--space-lg)]">
+              <h3 className="text-lg font-semibold text-[var(--color-text)] mb-2">Design System Guidelines</h3>
+              <p className="text-[var(--color-text-secondary)] mb-[var(--space-md)] max-w-2xl">
+                For complete guidelines on utilizing these components, styling conventions, and accessibility patterns, please refer to the documentation included in the repository.
+              </p>
+              <Button variant="secondary" onClick={() => alert("Docs would typically open a new page or markdown viewer.")}>
+                Read the Documentation
+              </Button>
+            </Card>
+          </div>
 
           {/* Footer spacer */}
           <div className="py-[var(--space-2xl)]" />

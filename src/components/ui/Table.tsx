@@ -1,4 +1,4 @@
-import { ReactNode, TdHTMLAttributes, ThHTMLAttributes, HTMLAttributes } from "react";
+import React, { ReactNode, TdHTMLAttributes, ThHTMLAttributes, HTMLAttributes } from "react";
 import clsx from "clsx";
 
 /* ---- Sub-components ---- */
@@ -8,7 +8,7 @@ export function Thead({ children, className, ...props }: HTMLAttributes<HTMLTabl
     <thead
       className={clsx(
         "bg-[var(--color-surface)] text-[var(--color-muted)]",
-        "text-xs font-semibold uppercase tracking-wide",
+        "text-xs font-medium uppercase tracking-wider",
         "border-b border-[var(--color-border)]",
         className
       )}
@@ -32,22 +32,19 @@ export function Tbody({ children, className, ...props }: HTMLAttributes<HTMLTabl
 
 export function Tr({ children, className, ...props }: HTMLAttributes<HTMLTableRowElement>) {
   return (
-    <tr className={clsx("transition-base", className)} {...props}>
+    <tr className={clsx("transition-all duration-200 ease-in-out", className)} {...props}>
       {children}
     </tr>
   );
 }
 
-export function Th({
-  children,
-  className,
-  ...props
-}: ThHTMLAttributes<HTMLTableCellElement>) {
+export const Th = React.forwardRef<HTMLTableCellElement, ThHTMLAttributes<HTMLTableCellElement>>(({ children, className, ...props }, ref) => {
   return (
     <th
+      ref={ref}
       className={clsx(
-        "px-[var(--space-md)] py-[var(--space-sm)]",
-        "text-left text-xs font-semibold text-[var(--color-muted)]",
+        "px-[var(--space-lg)] py-[var(--space-md)]",
+        "text-left text-xs font-medium text-[var(--color-muted)]",
         "whitespace-nowrap",
         className
       )}
@@ -56,7 +53,9 @@ export function Th({
       {children}
     </th>
   );
-}
+});
+
+Th.displayName = "Th";
 
 export function Td({
   children,
@@ -66,8 +65,8 @@ export function Td({
   return (
     <td
       className={clsx(
-        "px-[var(--space-md)] py-[var(--space-sm)]",
-        "text-sm text-[var(--color-text)]",
+        "px-[var(--space-lg)] py-[var(--space-md)]",
+        "text-sm text-[var(--color-text-secondary)] font-normal",
         className
       )}
       {...props}
@@ -93,16 +92,16 @@ export function Table({
   hoverable = false,
 }: TableProps) {
   return (
-    <div className="w-full overflow-x-auto rounded-[var(--radius-lg)] border border-[var(--color-border)]">
+    <div className="w-full overflow-x-auto rounded-[var(--radius-xl)] border border-[var(--color-border)] shadow-sm bg-[var(--color-bg)]">
       <table
         className={clsx(
           "w-full border-collapse text-sm",
 
           /* Striped — every even tbody <tr> gets a tinted bg */
-          striped && "[&_tbody>tr:nth-child(even)]:bg-[var(--color-surface)]",
+          striped && "[&_tbody>tr:nth-child(even)]:bg-[var(--color-surface)]/50",
 
           /* Hoverable — all tbody <tr> highlight on hover */
-          hoverable && "[&_tbody>tr:hover]:bg-[var(--color-surface-hover)]",
+          hoverable && "[&_tbody>tr:hover]:bg-[var(--color-surface-hover)] [&_tbody>tr:hover_td]:text-[var(--color-text)]",
 
           className
         )}
